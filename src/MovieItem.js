@@ -1,13 +1,24 @@
 import React from "react";
+import Like from "./Like";
 
-const MovieItem = ({ movie, deleteHandler}) => {
-  const {title, genre:{name}, numberInStock, dailyRentalRate} = movie;
+const MovieItem = ({ movie, deleteHandler, likeStatus, updateLikeStatus }) => {
+  const {
+    _id,
+    title,
+    genre: { name },
+    numberInStock,
+    dailyRentalRate
+  } = movie;
+
   return (
     <tr>
       <td>{title}</td>
       <td>{name}</td>
       <td>{numberInStock}</td>
       <td>{dailyRentalRate}</td>
+      <td>
+        <Like likeHandler={updateLikeStatus} likeStatus={likeStatus} id={_id} />
+      </td>
       <td>
         <button
           className="btn btn-danger"

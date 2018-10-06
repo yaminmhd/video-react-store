@@ -18,6 +18,16 @@ class Movies extends Component {
     });
   }
 
+  updateLikeStatus = (id) => {
+    const {movies} = this.state
+    const cloneMovies = [...movies];
+    const index = cloneMovies.findIndex(movie => movie._id === id);
+    cloneMovies[index].liked = !cloneMovies[index].liked;
+    this.setState({
+      movies: cloneMovies
+    })
+  }
+
   render() {
     const { movies } = this.state;
     const headers = (
@@ -45,6 +55,8 @@ class Movies extends Component {
               return (
                 <MovieItem
                   key={movie._id}
+                  likeStatus = {movie.liked}
+                  updateLikeStatus = {this.updateLikeStatus}
                   movie={movie}
                   deleteHandler={() => this.deleteMovie(movie._id)}
                 />
