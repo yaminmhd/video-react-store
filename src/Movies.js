@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import MovieItem from "./MovieItem";
 import { getMovies } from "./services/fakeMovieService";
+import { getGenres } from "./services/fakeGenreService";
 import Pagination from "./Pagination";
 import { paginate } from "./utils/paginate";
+import List from "./List";
 
 class Movies extends Component {
   constructor(props) {
     super(props);
     this.state = {
       movies: getMovies(),
+      genres: getGenres(),
       pageSize: 4,
       currentPage: 1
     };
@@ -40,7 +43,7 @@ class Movies extends Component {
 
   render() {
     const { length: count } = this.state.movies;
-    const { movies: allMovies, pageSize, currentPage } = this.state;
+    const { movies: allMovies, pageSize, currentPage, genres } = this.state;
     const headers = (
       <thead>
         <tr>
@@ -59,30 +62,37 @@ class Movies extends Component {
     const movies = paginate(allMovies, currentPage, pageSize);
 
     return (
-      <div>
-        <h3 className="m-2">{checkMoviesLength}</h3>
-        <table className="table">
-          {movies.length !== 0 ? headers : <thead />}
-          <tbody>
-            {movies.map(movie => {
-              return (
-                <MovieItem
-                  key={movie._id}
-                  likeStatus={movie.liked}
-                  updateLikeStatus={this.updateLikeStatus}
-                  movie={movie}
-                  deleteHandler={() => this.deleteMovie(movie._id)}
-                />
-              );
-            })}
-          </tbody>
-        </table>
-        <Pagination
-          itemsCount={count}
-          pageSize={pageSize}
-          onPageChange={this.handlePageChange}
-          currentPage={currentPage}
-        />
+      <div style={{margin:'50px'}}>
+        <div className="row">
+          <div className="col-3">
+            <List genres={genres} />
+          </div>
+          <div className="col-9">
+            <h3 className="m-2">{checkMoviesLength}</h3>
+            <table className="table">
+              {movies.length !== 0 ? headers : <thead />}
+              <tbody>
+                {movies.map(movie => {
+                  return (
+                    <MovieItem
+                      key={movie._id}
+                      likeStatus={movie.liked}
+                      updateLikeStatus={this.updateLikeStatus}
+                      movie={movie}
+                      deleteHandler={() => this.deleteMovie(movie._id)}
+                    />
+                  );
+                })}
+              </tbody>
+            </table>
+            <Pagination
+              itemsCount={count}
+              pageSize={pageSize}
+              onPageChange={this.handlePageChange}
+              currentPage={currentPage}
+            />
+          </div>
+        </div>
       </div>
     );
   }
